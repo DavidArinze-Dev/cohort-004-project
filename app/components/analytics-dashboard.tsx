@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import {
   LineChart,
@@ -89,6 +89,8 @@ export function AnalyticsDashboard({ analytics, period }: Props) {
   const { summary, timeSeries, courses } = analytics;
   const [sortKey, setSortKey] = useState<SortKey>("revenue");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const isEmpty =
     courses.length === 0 ||
@@ -199,42 +201,46 @@ export function AnalyticsDashboard({ analytics, period }: Props) {
               <CardTitle>Revenue Over Time</CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={280}>
-                <LineChart
-                  data={chartData}
-                  margin={{ top: 4, right: 16, bottom: 4, left: 8 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis
-                    dataKey="label"
-                    tick={{ fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                  />
-                  <YAxis
-                    tickFormatter={(v: number) => `$${v.toFixed(0)}`}
-                    tick={{ fontSize: 12 }}
-                    tickLine={false}
-                    axisLine={false}
-                    width={56}
-                  />
-                  <Tooltip
-                    formatter={(value) => [
-                      typeof value === "number"
-                        ? `$${value.toFixed(2)}`
-                        : value,
-                      "Revenue",
-                    ]}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    strokeWidth={2}
-                    dot={false}
-                    activeDot={{ r: 4 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {mounted ? (
+                <ResponsiveContainer width="100%" height={280}>
+                  <LineChart
+                    data={chartData}
+                    margin={{ top: 4, right: 16, bottom: 4, left: 8 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis
+                      dataKey="label"
+                      tick={{ fontSize: 12 }}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      tickFormatter={(v: number) => `$${v.toFixed(0)}`}
+                      tick={{ fontSize: 12 }}
+                      tickLine={false}
+                      axisLine={false}
+                      width={56}
+                    />
+                    <Tooltip
+                      formatter={(value) => [
+                        typeof value === "number"
+                          ? `$${value.toFixed(2)}`
+                          : value,
+                        "Revenue",
+                      ]}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="revenue"
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 4 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-[280px]" />
+              )}
             </CardContent>
           </Card>
 

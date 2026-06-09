@@ -92,11 +92,7 @@ export function AnalyticsDashboard({ analytics, period }: Props) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  const isEmpty =
-    courses.length === 0 ||
-    (summary.totalRevenue === 0 &&
-      summary.totalEnrollments === 0 &&
-      summary.ratingCount === 0);
+  const isEmpty = courses.length === 0;
 
   function handleSort(key: SortKey) {
     if (key === sortKey) {
@@ -144,7 +140,7 @@ export function AnalyticsDashboard({ analytics, period }: Props) {
 
       {isEmpty ? (
         <div className="flex items-center justify-center rounded-xl border py-24 text-muted-foreground">
-          <p>No revenue data yet. Publish a course to start tracking analytics.</p>
+          <p>No courses yet. Create and publish a course to start tracking analytics.</p>
         </div>
       ) : (
         <>
